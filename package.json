@@ -1,0 +1,15 @@
+{
+  "name": "xbuddy-invest-research",
+  "version": "0.1.0",
+  "description": "XBuddy 投研工作台 — 面向投资研究者的个人 Agent 工作台（Agent Harness + 投研产品体验）",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node test/run-tests.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

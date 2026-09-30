@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>XBuddy · 投研工作台</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">XBuddy<em> · 投研工作台</em></div>
+  <nav class="tabs" id="nav">
+    <a data-tab="research" class="active">研究台</a>
+    <a data-tab="memory">记忆库</a>
+    <a data-tab="observ">可观测性</a>
+    <a data-tab="tools">工具清单</a>
+  </nav>
+  <div class="top-status" id="topStatus"></div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar" style="display:flex; flex-direction:column;">
+    <div class="side-head">研究线程 <span class="btn sm ghost" id="newThreadBtn">＋ 新线程</span></div>
+    <div class="thread-list" id="threadList"></div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>
