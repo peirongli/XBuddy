@@ -37,8 +37,11 @@ const UNIVERSE = {
 function nameLookup(q) {
   const hits = Object.entries(UNIVERSE).filter(([code, v]) => code.includes(q) || v.name.includes(q));
   if (hits.length) return hits;
-  const rnd = seedRand(q); const entries = Object.entries(UNIVERSE);
-  return [entries[Math.floor(rnd() * entries.length)]];
+  // 未收录标的：按查询确定性构造演示标的（名称=查询本身），不随机冒充某只真实股票
+  const rnd = seedRand(q);
+  const num = 100000 + Math.floor(rnd() * 899999);
+  const suffix = rnd() > 0.5 ? 'SZ' : 'SH';
+  return [[`${num}.${suffix}`, { name: q, base: Math.round(15 + rnd() * 135), pe: 15, listDate: '2000-01-01' }]];
 }
 
 export const mock = {

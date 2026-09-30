@@ -62,6 +62,16 @@ test('计划成本估算与工具注册表一致', () => {
   const p = templatePlan('分析贵州茅台近一年基本面与估值水位');
   assert.ok(estimatePlanCost(p.steps) > 0);
 });
+test('实体提取剥离研究语境词（回归：吞入"近一年基本面"导致检索错标的）', () => {
+  const p = templatePlan('分析贵州茅台近一年基本面与估值水位');
+  const q = p.steps[0].args.q;
+  assert.strictEqual(q, '贵州茅台', `实际: ${q}`);
+});
+test('对比语境双标的拆分（回归：A 标的粘连"和比亚迪"）', () => {
+  const p = templatePlan('对比宁德时代和比亚迪的最新财务表现');
+  const q1 = p.steps[0].args.q;
+  assert.strictEqual(q1, '宁德时代', `实际: ${q1}`);
+});
 
 console.log('== 工具注册表 ==');
 test('所有工具具备 schema/权限/成本声明', () => {
@@ -106,6 +116,14 @@ test('快照 prev_price 与 K 线末收一致（口径自洽）', () => {
 });
 test('DEMO 证据显式携带 demo 标记', () => {
   assert.strictEqual(mock.searchTickers('茅台').meta.demo, true);
+});
+test('DEMO 未收录标的按查询构造，不随机冒充真实股票（回归）', () => {
+  const r = mock.searchTickers('某未收录公司').data.item;
+  assert.strictEqual(r.length, 1);
+  assert.strictEqual(r[0].name, '某未收录公司');
+  assert.match(r[0].thscode, /^\d{6}\.(SH|SZ)$/);
+  const known = new Set(Object.values({ '600519.SH': 1, '000858.SZ': 1, '300750.SZ': 1, '002594.SZ': 1, '601318.SH': 1, '000001.SZ': 1, '600036.SH': 1, '688981.SH': 1 }));
+  assert.ok(!known.has(r[0].thscode), `不应返回预置真实标的: ${r[0].thscode}`);
 });
 
 console.log('== 参数引用解析 ==');

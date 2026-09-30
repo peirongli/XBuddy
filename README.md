@@ -134,7 +134,7 @@ xbuddy/
 │       ├── events.js      # 事件总线（journal + SSE）
 │       └── store.js       # 线程/运行/证据/产物/记忆 持久化
 ├── web/                   # 前端 SPA（原生 JS，ECharts）
-├── test/run-tests.js      # 单元/契约测试（21 例）
+├── test/run-tests.js      # 单元/契约测试（24 例）
 └── docs/                  # AI 使用与验证记录、测试说明
 ```
 

@@ -109,10 +109,18 @@ export function templatePlan(goal) {
 function extractCode(g) { const m = g.match(/\d{6}(\.(SH|SZ|BJ))?/i); return m ? m[0] : null; }
 function firstEntity(g) {
   if (extractCode(g)) return extractCode(g);
-  const m = g.match(/(?:分析|研究|看看|调研|了解)[一下]*\s*《?([\u4e00-\u9fa5A-Za-z0-9]{2,10})》?/);
-  if (m) return m[1];
-  const m2 = g.match(/^([\u4e00-\u9fa5A-Za-z0-9]{2,10})\s*(?:的|最近|近|最新|基本|估值|财务)/);
-  return m2 ? m2[1] : g.match(/对比\s*([\u4e00-\u9fa5A-Za-z0-9]{2,10})/)?.[1] || null;
+  let m = g.match(/(?:分析|研究|看看|调研|了解)[一下]*\s*《?([\u4e00-\u9fa5A-Za-z0-9]{2,10})》?/);
+  if (!m) m = g.match(/^([\u4e00-\u9fa5A-Za-z0-9]{2,10})\s*(?:的|最近|近|最新|基本|估值|财务)/);
+  if (m) {
+    let e = m[1].replace(/^(对比|比较)/, '');
+    // 剥离贪婪捕获吞进来的研究语境词（如「贵州茅台近一年基本面」→「贵州茅台」）
+    e = e.replace(/(近[一二三]?年|最近|最新|基本面|估值|财务|水位|表现|情况|动向|年报|盈利|现金流|对比).*$/, '');
+    // 对比语境下双标的可能粘在一起（如「宁德时代和比亚迪」）→ 取连接词前半
+    const c = e.match(/^([\u4e00-\u9fa5A-Za-z0-9]{2,8})\s*(?:与|和|跟)/);
+    if (c) e = c[1];
+    return e || null;
+  }
+  return g.match(/对比\s*([\u4e00-\u9fa5A-Za-z0-9]{2,10})/)?.[1] || null;
 }
 function secondEntity(g) {
   const m = g.match(/(?:与|和|跟)[\u4e00-\u9fa5A-Za-z0-9]{2,10}?(对比|比较|相比|哪个)/);
